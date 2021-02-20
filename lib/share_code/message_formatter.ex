@@ -6,7 +6,6 @@ defmodule ShareCode.MessageFormatter do
 
       iex> ShareCode.MessageFormatter.translate_key_code(%{"key" => "Enter"})
       %{"key" => "\n"}
-
       iex> ShareCode.MessageFormatter.translate_key_code(%{"key" => "2"})
       %{"key" => "2"}
   """
@@ -29,6 +28,14 @@ defmodule ShareCode.MessageFormatter do
         "selection_end" => selection_end
       }) do
     delete_selection(room_state, selection_start, selection_end)
+  end
+
+  def add_character(room_state, %{
+        "key" => "Delete",
+        "selection_start" => selection_start,
+        "selection_end" => selection_end
+      }) do
+    delete_selection(room_state, selection_start, selection_end, :delete_right)
   end
 
   def add_character(room_state, %{
@@ -66,7 +73,16 @@ defmodule ShareCode.MessageFormatter do
       "aeu"
       iex> ShareCode.MessageFormatter.delete_selection("aoeu", 1, 2)
       "eu"
+      iex> ShareCode.MessageFormatter.delete_selection("aoeu", 2, 2, :delete_right)
+      "aou"
   """
+  def delete_selection(text, selection_start, selection_end, :delete_right) do
+    {first_half, second_half} = get_halfs(text, selection_start, selection_end)
+    second_half_with_delete = String.slice(second_half, 1..-1)
+
+    "#{first_half}#{second_half_with_delete}"
+  end
+
   def delete_selection(text, selection_start, selection_end) do
     {first_half, second_half} = get_halfs(text, selection_start, selection_end)
     first_half_with_backspace = String.slice(first_half, 0..-2)

@@ -9,19 +9,27 @@ const getSelectionRange = event => {
   }
 }
 
-export const keyupHandler = (event, channel, assignId) => {
+export const keydownHandler = (event, channel, assignId) => {
+  const validKeys = [
+    32, // Spacebar
+    13, // Return
+    8,  // Backspace
+    46  // Delete
+  ]
+
   const valid =
       (event.keyCode > 47 && event.keyCode < 58)   || // number keys
-      event.keyCode == 32 || event.keyCode == 13   || // spacebar & return key(s) (if you want to allow carriage returns)
       (event.keyCode > 64 && event.keyCode < 91)   || // letter keys
       (event.keyCode > 95 && event.keyCode < 112)  || // numpad keys
       (event.keyCode > 185 && event.keyCode < 193) || // ;=,-./` (in order)
       (event.keyCode > 218 && event.keyCode < 223) ||  // [\]' (in order)
-      event.keyCode == 8
+      validKeys.includes(event.keyCode)
+
+  const isKeyCommand = event.ctrlKey
 
   const selectionRange = getSelectionRange(event)
 
-  if(valid) {
+  if(valid && !isKeyCommand) {
     channel.push("new_msg", {
       key: event.key,
       assign_id: assignId,
@@ -29,15 +37,12 @@ export const keyupHandler = (event, channel, assignId) => {
       selection_end: selectionRange.selection_end
     })
   }
-  console.log(event)
 }
 
 export const socketMessageHandler = (payload, assignId) => {
-  console.log(payload)
-
   if(payload.assign_id === assignId) return
 
-  if(payload.key.toLowerCase() === "backspace") {
+  if(["backspace", "delete"].includes(payload.key.toLowerCase())) {
     deleteCharacter(payload)
     return
   }

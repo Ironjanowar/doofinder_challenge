@@ -7,7 +7,7 @@
 // Pass the token on params as below. Or remove it
 // from the params if you are not using authentication.
 import {Socket} from "phoenix"
-import { socketMessageHandler, keyupHandler } from "./handlers"
+import { socketMessageHandler, keydownHandler } from "./handlers"
 
 let socket = new Socket("/socket", {params: {token: window.userToken}})
 
@@ -57,16 +57,16 @@ socket.connect()
 
 // Now that you are connected, you can join channels with a topic:
 let channel = socket.channel("default_room:lobby", {})
-let chatInput = document.querySelector("#chat-input")
+let textInput = document.querySelector("#chat-input")
 let assignId = ""
 
-chatInput.addEventListener("keydown", event => keyupHandler(event, channel, assignId))
+textInput.addEventListener("keydown", event => keydownHandler(event, channel, assignId))
 channel.on("new_msg", payload => socketMessageHandler(payload, assignId))
 
 channel.join()
   .receive("ok", resp => {
     assignId = resp.assign_id
-    chatInput.value = resp.room_text
+    textInput.value = resp.room_text
     console.log("Joined successfully:", resp)
   })
   .receive("error", resp => { console.log("Unable to join", resp) })
