@@ -18,6 +18,7 @@ defmodule ShareCodeWeb.DefaultRoomChannel do
     new_msg =
       msg |> MessageFormatter.translate_key_code() |> MessageFormatter.add_room(@room_name)
 
+    RoomStateManager.handle_new_msg(@room_name, new_msg)
     broadcast!(socket, "new_msg", new_msg)
 
     {:noreply, socket}

@@ -9,9 +9,8 @@ defmodule ShareCode.Application do
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
-      ShareCodeWeb.Endpoint
-      # Starts a worker by calling: ShareCode.Worker.start_link(arg)
-      # {ShareCode.Worker, arg},
+      ShareCodeWeb.Endpoint,
+      ShareCode.RoomStateManager
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

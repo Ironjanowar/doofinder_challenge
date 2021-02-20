@@ -1,4 +1,4 @@
-import { deleteCharacter } from "./utils"
+import { addCharacter, deleteCharacter } from "./utils"
 
 const getSelectionRange = event => {
   let chatInput = document.querySelector("#chat-input")
@@ -42,8 +42,5 @@ export const socketMessageHandler = (payload, assignId) => {
     return
   }
 
-  let chatInput = document.querySelector("#chat-input")
-  console.log(`PRE UPDATE: ${chatInput.innerHTML}`);
-  chatInput.value = `${chatInput.value}${payload.key}`
-  console.log(`POST UPDATE: ${chatInput.innerHTML}`);
+  addCharacter(payload)
 }
