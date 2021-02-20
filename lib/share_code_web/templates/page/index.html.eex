@@ -1,0 +1,1 @@
+<textarea id="chat-input" rows="30" cols="50" style="background-color:dimgrey;color:white; min-height: unset !important; height: 1000px" placeholder="Code here..."></textarea>
