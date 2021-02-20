@@ -8,7 +8,9 @@ defmodule ShareCodeWeb.DefaultRoomChannel do
   @room_name "default_room"
 
   def join("default_room:lobby", _message, socket) do
-    {:ok, UUID.uuid4(), socket}
+    room_text = RoomStateManager.get_room_state(@room_name)
+
+    {:ok, %{assign_id: UUID.uuid4(), room_text: room_text}, socket}
   end
 
   def handle_in("new_msg", msg, socket) do

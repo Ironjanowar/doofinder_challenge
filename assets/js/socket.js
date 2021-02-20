@@ -65,7 +65,8 @@ channel.on("new_msg", payload => socketMessageHandler(payload, assignId))
 
 channel.join()
   .receive("ok", resp => {
-    assignId = resp
+    assignId = resp.assign_id
+    chatInput.value = resp.room_text
     console.log("Joined successfully:", resp)
   })
   .receive("error", resp => { console.log("Unable to join", resp) })
