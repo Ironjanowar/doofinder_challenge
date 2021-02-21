@@ -7,7 +7,7 @@
 // Pass the token on params as below. Or remove it
 // from the params if you are not using authentication.
 import {Socket} from "phoenix"
-import { socketMessageHandler, keydownHandler } from "./handlers"
+import { pasteHandler, socketMessageHandler, keydownHandler } from "./handlers"
 
 let socket = new Socket("/socket", {params: {token: window.userToken}})
 
@@ -61,6 +61,7 @@ let textInput = document.querySelector("#chat-input")
 let assignId = ""
 
 textInput.addEventListener("keydown", event => keydownHandler(event, channel, assignId))
+textInput.addEventListener("paste", event => pasteHandler(event, channel, assignId))
 channel.on("new_msg", payload => socketMessageHandler(payload, assignId))
 
 channel.join()

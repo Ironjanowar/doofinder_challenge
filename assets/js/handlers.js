@@ -9,6 +9,19 @@ const getSelectionRange = event => {
   }
 }
 
+export const pasteHandler = (event, channel, assignId) => {
+  const textPasted = (event.clipboardData || window.clipboardData).getData('text')
+
+  const selectionRange = getSelectionRange(event)
+
+  channel.push("new_msg", {
+    key: textPasted,
+    assign_id: assignId,
+    selection_start: selectionRange.selection_start,
+    selection_end: selectionRange.selection_end
+  })
+}
+
 export const keydownHandler = (event, channel, assignId) => {
   const validKeys = [
     32, // Spacebar
@@ -18,14 +31,14 @@ export const keydownHandler = (event, channel, assignId) => {
   ]
 
   const valid =
-      (event.keyCode > 47 && event.keyCode < 58)   || // number keys
-      (event.keyCode > 64 && event.keyCode < 91)   || // letter keys
-      (event.keyCode > 95 && event.keyCode < 112)  || // numpad keys
-      (event.keyCode > 185 && event.keyCode < 193) || // ;=,-./` (in order)
-      (event.keyCode > 218 && event.keyCode < 223) ||  // [\]' (in order)
-      validKeys.includes(event.keyCode)
+        (event.keyCode > 47 && event.keyCode < 58)   || // number keys
+        (event.keyCode > 64 && event.keyCode < 91)   || // letter keys
+        (event.keyCode > 95 && event.keyCode < 112)  || // numpad keys
+        (event.keyCode > 185 && event.keyCode < 193) || // ;=,-./` (in order)
+        (event.keyCode > 218 && event.keyCode < 223) ||  // [\]' (in order)
+        validKeys.includes(event.keyCode)
 
-  const isKeyCommand = event.ctrlKey
+  const isKeyCommand = event.ctrlKey || event.metaKey
 
   const selectionRange = getSelectionRange(event)
 
