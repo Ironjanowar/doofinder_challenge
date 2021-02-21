@@ -35,7 +35,19 @@ defmodule ShareCode.MessageFormatter do
         "selection_start" => selection_start,
         "selection_end" => selection_end
       }) do
-    delete_selection(room_state, selection_start, selection_end, :delete_right)
+    if selection_start == selection_end do
+      delete_selection(room_state, selection_start, selection_end, :delete_right)
+    else
+      delete_selection(room_state, selection_start, selection_end, :no_delete)
+    end
+  end
+
+  def add_character(room_state, %{
+        "key" => "cut",
+        "selection_start" => selection_start,
+        "selection_end" => selection_end
+      }) do
+    delete_selection(room_state, selection_start, selection_end, :no_delete)
   end
 
   def add_character(room_state, %{
@@ -81,6 +93,11 @@ defmodule ShareCode.MessageFormatter do
     second_half_with_delete = String.slice(second_half, 1..-1)
 
     "#{first_half}#{second_half_with_delete}"
+  end
+
+  def delete_selection(text, selection_start, selection_end, :no_delete) do
+    {first_half, second_half} = get_halfs(text, selection_start, selection_end)
+    "#{first_half}#{second_half}"
   end
 
   def delete_selection(text, selection_start, selection_end) do

@@ -39,12 +39,13 @@ export const keydownHandler = (event, channel, assignId) => {
         validKeys.includes(event.keyCode)
 
   const isKeyCommand = event.ctrlKey || event.metaKey
+  const isCutCommand = isKeyCommand && event.keyCode === 88
 
   const selectionRange = getSelectionRange(event)
 
-  if(valid && !isKeyCommand) {
+  if(valid && (!isKeyCommand || isCutCommand)) {
     channel.push("new_msg", {
-      key: event.key,
+      key: isCutCommand ? "cut" : event.key,
       assign_id: assignId,
       selection_start: selectionRange.selection_start,
       selection_end: selectionRange.selection_end
@@ -55,7 +56,7 @@ export const keydownHandler = (event, channel, assignId) => {
 export const socketMessageHandler = (payload, assignId) => {
   if(payload.assign_id === assignId) return
 
-  if(["backspace", "delete"].includes(payload.key.toLowerCase())) {
+  if(["backspace", "delete", "cut"].includes(payload.key.toLowerCase())) {
     deleteCharacter(payload)
     return
   }

@@ -5,8 +5,12 @@ const getHalfs = (payload, text) => {
     const secondHalf = chatInput.value.slice(payload.selection_end)
 
     return {first_half: firstHalf, second_half: secondHalf.slice(1)}
-  } else {
+  } else if(payload.key === "Backspace" && payload.selection_start === payload.selection_end) {
     const firstHalf = chatInput.value.slice(0, payload.selection_start !== 0 ? payload.selection_start - 1 : 0)
+    const secondHalf = chatInput.value.slice(payload.selection_end)
+    return {first_half: firstHalf, second_half: secondHalf}
+  } else {
+    const firstHalf = chatInput.value.slice(0, payload.selection_start)
     const secondHalf = chatInput.value.slice(payload.selection_end)
 
     return {first_half: firstHalf, second_half: secondHalf}
