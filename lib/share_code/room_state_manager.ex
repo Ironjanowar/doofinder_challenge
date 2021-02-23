@@ -41,7 +41,7 @@ defmodule ShareCode.RoomStateManager do
       end
 
     # Apply add character algorithm
-    new_room_state = MessageFormatter.add_character(room_state, msg)
+    new_room_state = MessageFormatter.record_new_event(room_state, msg)
 
     # Creates a room if does not exist
     {:noreply, Map.put(state, room, new_room_state)}

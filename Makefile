@@ -3,7 +3,7 @@ MIX_ENV?=dev
 deps:
 	mix deps.get
 	mix deps.compile
-compile: deps
+compile:
 	mix compile
 
 iex:
@@ -12,4 +12,7 @@ iex:
 clean:
 	rm -rf _build
 
-.PHONY: deps compile iex clean
+test: compile
+	mix test
+
+.PHONY: deps compile iex clean test

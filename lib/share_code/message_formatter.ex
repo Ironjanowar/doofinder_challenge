@@ -22,7 +22,26 @@ defmodule ShareCode.MessageFormatter do
   """
   def add_room(msg, room), do: Map.put(msg, "room", room)
 
-  def add_character(room_state, %{
+  @doc ~S"""
+  Records a new event by adding or deleting text
+
+  ## Examples
+
+    iex> ShareCode.MessageFormatter.record_new_event("aoeu", %{
+    ...>   "key" => "Backspace",
+    ...>   "selection_start" => 1,
+    ...>   "selection_end" => 1
+    ...> })
+    "oeu"
+
+    iex> ShareCode.MessageFormatter.record_new_event("aoeu", %{
+    ...>   "key" => "a",
+    ...>   "selection_start" => 1,
+    ...>   "selection_end" => 1
+    ...> })
+    "aaoeu"
+  """
+  def record_new_event(room_state, %{
         "key" => "Backspace",
         "selection_start" => selection_start,
         "selection_end" => selection_end
@@ -30,7 +49,7 @@ defmodule ShareCode.MessageFormatter do
     delete_selection(room_state, selection_start, selection_end)
   end
 
-  def add_character(room_state, %{
+  def record_new_event(room_state, %{
         "key" => "Delete",
         "selection_start" => selection_start,
         "selection_end" => selection_end
@@ -42,7 +61,7 @@ defmodule ShareCode.MessageFormatter do
     end
   end
 
-  def add_character(room_state, %{
+  def record_new_event(room_state, %{
         "key" => "cut",
         "selection_start" => selection_start,
         "selection_end" => selection_end
@@ -50,7 +69,7 @@ defmodule ShareCode.MessageFormatter do
     delete_selection(room_state, selection_start, selection_end, :no_delete)
   end
 
-  def add_character(room_state, %{
+  def record_new_event(room_state, %{
         "key" => character,
         "selection_start" => selection_start,
         "selection_end" => selection_end
