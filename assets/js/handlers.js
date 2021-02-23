@@ -38,7 +38,7 @@ export const keydownHandler = (event, channel, assignId) => {
         (event.keyCode > 218 && event.keyCode < 223) ||  // [\]' (in order)
         validKeys.includes(event.keyCode)
 
-  const isKeyCommand = event.ctrlKey || event.metaKey
+  const isKeyCommand = event.ctrlKey || event.metaKey || event.altKey
   const isCutCommand = isKeyCommand && event.keyCode === 88
 
   const selectionRange = getSelectionRange(event)
