@@ -12,7 +12,7 @@ defmodule ShareCode.RoomStateManagerTest do
     RoomStateManager.handle_new_msg("default_room", %{
       "key" => "a",
       "selection_start" => 0,
-      "selection_end" => 1
+      "selection_end" => 0
     })
 
     assert :sys.get_state(RoomStateManager) == %{"default_room" => "a"}
@@ -22,7 +22,7 @@ defmodule ShareCode.RoomStateManagerTest do
     RoomStateManager.handle_new_msg("default_room", %{
       "key" => "a",
       "selection_start" => 0,
-      "selection_end" => 1
+      "selection_end" => 0
     })
 
     assert RoomStateManager.get_room_state("default_room") == "a"
@@ -32,7 +32,7 @@ defmodule ShareCode.RoomStateManagerTest do
     RoomStateManager.handle_new_msg("new_room", %{
       "key" => "a",
       "selection_start" => 0,
-      "selection_end" => 1
+      "selection_end" => 0
     })
 
     assert RoomStateManager.get_room_state("new_room") == "a"

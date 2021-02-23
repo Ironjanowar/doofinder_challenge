@@ -12,7 +12,7 @@ config :share_code, ShareCodeWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "vMfsG8oW7TKDL71W7/VuL1wRXibcQamKH1cckcjo6zgHwNwS1silIbHSa/99zGtG",
   render_errors: [view: ShareCodeWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: ShareCode.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub_server: ShareCode.PubSub
 
 # Configures Elixir's Logger
 config :logger, :console,

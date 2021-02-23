@@ -1,7 +1,7 @@
 import { addCharacter, deleteCharacter } from "./utils"
 
 const getSelectionRange = event => {
-  let chatInput = document.querySelector("#chat-input")
+  let chatInput = document.querySelector("#text-input")
 
   return {
     selection_start: chatInput.selectionStart,

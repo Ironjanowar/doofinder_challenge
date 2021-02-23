@@ -10,6 +10,7 @@ defmodule ShareCode.Application do
     children = [
       # Start the endpoint when the application starts
       ShareCodeWeb.Endpoint,
+      {Phoenix.PubSub, [name: ShareCode.PubSub, adapter: Phoenix.PubSub.PG2]},
       ShareCode.RoomStateManager
     ]
 

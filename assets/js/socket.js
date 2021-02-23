@@ -56,8 +56,8 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 socket.connect()
 
 // Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("default_room:lobby", {})
-let textInput = document.querySelector("#chat-input")
+let channel = socket.channel("default_room:default_room", {})
+let textInput = document.querySelector("#text-input")
 let assignId = ""
 
 textInput.addEventListener("keydown", event => keydownHandler(event, channel, assignId))
@@ -68,7 +68,6 @@ channel.join()
   .receive("ok", resp => {
     assignId = resp.assign_id
     textInput.value = resp.room_text
-    console.log("Joined successfully:", resp)
   })
   .receive("error", resp => { console.log("Unable to join", resp) })
 

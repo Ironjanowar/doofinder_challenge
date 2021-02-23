@@ -1,4 +1,4 @@
-defmodule ShareCodeWeb.UserSocket do
+defmodule ShareCodeWeb.RoomSocket do
   use Phoenix.Socket
 
   channel("default_room:*", ShareCodeWeb.DefaultRoomChannel)

@@ -5,7 +5,7 @@ defmodule ShareCode.RoomStateManager do
 
   @rooms ["default_room"]
 
-  def child_spec(_) do
+  def child_spec() do
     %{id: __MODULE__, start: {__MODULE__, :start_link, [@rooms]}}
   end
 
