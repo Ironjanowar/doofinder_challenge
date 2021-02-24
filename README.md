@@ -14,15 +14,15 @@ To create the web server I have used Phoenix Framework from Elixir, this framewo
 
 The client is made in Javascript and It will be served with the HTML.
 
-## Communication client-server
+## Client-Server Communication
 
 The client will send an event for every key pressed, the event looks like this:
 
 ```json
 {
-  key: "a",
-  selection_start: 0,
-  selection_end: 0
+  "key": "a",
+  "selection_start": 0,
+  "selection_end": 0
 }
 ```
 

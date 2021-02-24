@@ -21,6 +21,7 @@ release_env:
 	export MIX_ENV=prod
 
 release: release_env deps compile
+	mix phx.digest
 	mix release
 
 start: release_env

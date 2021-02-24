@@ -9,7 +9,8 @@ defmodule ShareCode.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      releases: releases()
     ]
   end
 
@@ -40,6 +41,17 @@ defmodule ShareCode.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:elixir_uuid, "~> 1.2"}
+    ]
+  end
+
+  def releases do
+    [
+      share_code: [
+        version: "0.1.0",
+        include_erts: true,
+        include_executables_for: [:unix],
+        applications: [runtime_tools: :permanent]
+      ]
     ]
   end
 end
