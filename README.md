@@ -47,4 +47,13 @@ This module defines the GenServer that is in charge of mantaining the room state
 
 ## Docs
 
+## Usage
+
+To deploy the web server execute the script `./deploy.sh`, it should create a release and start it. To stop the process execute `./stop.sh`
+
+If this does not work start the aplication in dew with:
+ - `make deps`
+ - `make compile`
+ - `make iex`
+
 # Future development
