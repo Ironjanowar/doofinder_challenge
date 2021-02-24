@@ -27,13 +27,12 @@ defmodule ShareCodeWeb.DefaultRoomChannel do
     {:noreply, socket}
   end
 
+  def handle_out("new_msg", %{"assign_id" => id}, %{assigns: %{assign_id: id}} = socket) do
+    {:noreply, socket}
+  end
+
   def handle_out("new_msg", msg, socket) do
-    {assign_id, msg_to_send} = Map.pop(msg, "assign_id")
-
-    if socket.assigns[:assign_id] != assign_id do
-      push(socket, "new_msg", msg_to_send)
-    end
-
+    push(socket, "new_msg", Map.delete(msg, "assign_id"))
     {:noreply, socket}
   end
 end
