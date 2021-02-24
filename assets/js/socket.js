@@ -58,15 +58,13 @@ socket.connect()
 // Now that you are connected, you can join channels with a topic:
 let channel = socket.channel("default_room:default_room", {})
 let textInput = document.querySelector("#text-input")
-let assignId = ""
 
-textInput.addEventListener("keydown", event => keydownHandler(event, channel, assignId))
-textInput.addEventListener("paste", event => pasteHandler(event, channel, assignId))
-channel.on("new_msg", payload => socketMessageHandler(payload, assignId))
+textInput.addEventListener("keydown", event => keydownHandler(event, channel))
+textInput.addEventListener("paste", event => pasteHandler(event, channel))
+channel.on("new_msg", payload => socketMessageHandler(payload))
 
 channel.join()
   .receive("ok", resp => {
-    assignId = resp.assign_id
     textInput.value = resp.room_text
   })
   .receive("error", resp => { console.log("Unable to join", resp) })

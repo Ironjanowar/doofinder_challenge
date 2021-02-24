@@ -35,7 +35,7 @@ defmodule ShareCodeWeb.DefaultRoomChannelTest do
 
     assert_broadcast("new_msg", %{
       "key" => "a",
-      "assign_id" => _,
+      "assign_id" => ^assign_id,
       "selection_start" => 0,
       "selection_end" => 0
     })
@@ -62,5 +62,46 @@ defmodule ShareCodeWeb.DefaultRoomChannelTest do
       |> subscribe_and_join(ShareCodeWeb.DefaultRoomChannel, "default_room:default_room")
 
     assert room_text == "a"
+  end
+
+  test "A client should not receive its own messages" do
+    {:ok, _, client1_socket} =
+      ShareCodeWeb.RoomSocket
+      |> socket()
+      |> subscribe_and_join(ShareCodeWeb.DefaultRoomChannel, "default_room:default_room")
+
+    {:ok, _, _} =
+      ShareCodeWeb.RoomSocket
+      |> socket()
+      |> subscribe_and_join(ShareCodeWeb.DefaultRoomChannel, "default_room:default_room")
+
+    {:ok, _, _} =
+      ShareCodeWeb.RoomSocket
+      |> socket()
+      |> subscribe_and_join(ShareCodeWeb.DefaultRoomChannel, "default_room:default_room")
+
+    push(client1_socket, "new_msg", %{
+      "key" => "a",
+      "selection_start" => 0,
+      "selection_end" => 0
+    })
+
+    assert_push("new_msg", %{
+      "key" => "a",
+      "selection_start" => 0,
+      "selection_end" => 0
+    })
+
+    assert_push("new_msg", %{
+      "key" => "a",
+      "selection_start" => 0,
+      "selection_end" => 0
+    })
+
+    refute_push("new_msg", %{
+      "key" => "a",
+      "selection_start" => 0,
+      "selection_end" => 0
+    })
   end
 end

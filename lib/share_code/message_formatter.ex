@@ -23,6 +23,11 @@ defmodule ShareCode.MessageFormatter do
   def add_room(msg, room), do: Map.put(msg, "room", room)
 
   @doc ~S"""
+  Adds assign id to a message, getting it from a socket
+  """
+  def add_assign_id(msg, socket), do: Map.put(msg, "assign_id", socket.assigns[:assign_id])
+
+  @doc ~S"""
   Records a new event by adding or deleting text
 
   ## Examples

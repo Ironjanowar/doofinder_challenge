@@ -9,20 +9,19 @@ const getSelectionRange = event => {
   }
 }
 
-export const pasteHandler = (event, channel, assignId) => {
+export const pasteHandler = (event, channel) => {
   const textPasted = (event.clipboardData || window.clipboardData).getData('text')
 
   const selectionRange = getSelectionRange(event)
 
   channel.push("new_msg", {
     key: textPasted,
-    assign_id: assignId,
     selection_start: selectionRange.selection_start,
     selection_end: selectionRange.selection_end
   })
 }
 
-export const keydownHandler = (event, channel, assignId) => {
+export const keydownHandler = (event, channel) => {
   const validKeys = [
     32, // Spacebar
     13, // Return
@@ -46,20 +45,16 @@ export const keydownHandler = (event, channel, assignId) => {
   if(valid && (!isKeyCommand || isCutCommand)) {
     channel.push("new_msg", {
       key: isCutCommand ? "cut" : event.key,
-      assign_id: assignId,
       selection_start: selectionRange.selection_start,
       selection_end: selectionRange.selection_end
     })
   }
 }
 
-export const socketMessageHandler = (payload, assignId) => {
-  if(payload.assign_id === assignId) return
-
+export const socketMessageHandler = (payload) => {
   if(["backspace", "delete", "cut"].includes(payload.key.toLowerCase())) {
     deleteCharacter(payload)
-    return
+  } else {
+    addCharacter(payload)
   }
-
-  addCharacter(payload)
 }
