@@ -20,6 +20,8 @@ release_env:
 export SECRET_KEY_BASE=$(shell mix phx.gen.secret)
 
 release: deps compile release_env
+	cd assets && npm install
+	npm run deploy --prefix ./assets
 	mix phx.digest
 	MIX_ENV=prod mix release
 
