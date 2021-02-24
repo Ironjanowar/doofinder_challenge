@@ -17,17 +17,16 @@ test: compile
 	mix test
 
 release_env:
-	export SECRET_KEY_BASE=$(shell mix phx.gen.secret)
-	export MIX_ENV=prod
+export SECRET_KEY_BASE=$(shell mix phx.gen.secret)
 
-release: release_env deps compile
+release: deps compile release_env
 	mix phx.digest
-	mix release
+	MIX_ENV=prod mix release
 
 start: release_env
-	_build/dev/rel/share_code/bin/share_code daemon
+	MIX_ENV=prod _build/prod/rel/share_code/bin/share_code daemon
 
 stop:
-	_build/dev/rel/share_code/bin/share_code stop
+	_build/prod/rel/share_code/bin/share_code stop
 
-.PHONY: deps compile iex clean test release start stop
+.PHONY: deps compile iex clean test release start stop release_env
