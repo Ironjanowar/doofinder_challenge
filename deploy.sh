@@ -1,11 +1,11 @@
 #!/bin/bash
 
 export SECRET_KEY_BASE=$(mix phx.gen.secret)
-export MIX_ENV=prod
 
 echo -e "\nExecuting mix deps.get\n"
-mix deps.get
+mix deps.get --only prod
 
+export MIX_ENV=prod
 echo -e "\n\nExecuting mix deps.copmile\n"
 mix deps.compile
 
