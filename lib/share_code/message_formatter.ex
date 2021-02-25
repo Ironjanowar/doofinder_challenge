@@ -45,7 +45,22 @@ defmodule ShareCode.MessageFormatter do
     ...>   "selection_end" => 1
     ...> })
     "aaoeu"
+
+    iex> ShareCode.MessageFormatter.record_new_event("aoeu", %{
+    ...>   "key" => "Backspace",
+    ...>   "selection_start" => 1,
+    ...>   "selection_end" => 3
+    ...> })
+    "au"
   """
+  def record_new_event(room_state, %{
+        "key" => "Backspace",
+        "selection_start" => selection,
+        "selection_end" => selection
+      }) do
+    delete_selection(room_state, selection, selection, :delete_left)
+  end
+
   def record_new_event(room_state, %{
         "key" => "Backspace",
         "selection_start" => selection_start,
@@ -56,14 +71,18 @@ defmodule ShareCode.MessageFormatter do
 
   def record_new_event(room_state, %{
         "key" => "Delete",
+        "selection_start" => selection,
+        "selection_end" => selection
+      }) do
+    delete_selection(room_state, selection, selection, :delete_right)
+  end
+
+  def record_new_event(room_state, %{
+        "key" => "Delete",
         "selection_start" => selection_start,
         "selection_end" => selection_end
       }) do
-    if selection_start == selection_end do
-      delete_selection(room_state, selection_start, selection_end, :delete_right)
-    else
-      delete_selection(room_state, selection_start, selection_end, :no_delete)
-    end
+    delete_selection(room_state, selection_start, selection_end)
   end
 
   def record_new_event(room_state, %{
@@ -71,7 +90,7 @@ defmodule ShareCode.MessageFormatter do
         "selection_start" => selection_start,
         "selection_end" => selection_end
       }) do
-    delete_selection(room_state, selection_start, selection_end, :no_delete)
+    delete_selection(room_state, selection_start, selection_end)
   end
 
   def record_new_event(room_state, %{
@@ -105,10 +124,10 @@ defmodule ShareCode.MessageFormatter do
 
   ## Examples
 
-      iex> ShareCode.MessageFormatter.delete_selection("aoeu", 2, 2)
+      iex> ShareCode.MessageFormatter.delete_selection("aoeu", 2, 2, :delete_left)
       "aeu"
       iex> ShareCode.MessageFormatter.delete_selection("aoeu", 1, 2)
-      "eu"
+      "aeu"
       iex> ShareCode.MessageFormatter.delete_selection("aoeu", 2, 2, :delete_right)
       "aou"
   """
@@ -119,16 +138,16 @@ defmodule ShareCode.MessageFormatter do
     "#{first_half}#{second_half_with_delete}"
   end
 
-  def delete_selection(text, selection_start, selection_end, :no_delete) do
-    {first_half, second_half} = get_halfs(text, selection_start, selection_end)
-    "#{first_half}#{second_half}"
-  end
-
-  def delete_selection(text, selection_start, selection_end) do
+  def delete_selection(text, selection_start, selection_end, :delete_left) do
     {first_half, second_half} = get_halfs(text, selection_start, selection_end)
     first_half_with_backspace = String.slice(first_half, 0..-2)
 
     "#{first_half_with_backspace}#{second_half}"
+  end
+
+  def delete_selection(text, selection_start, selection_end) do
+    {first_half, second_half} = get_halfs(text, selection_start, selection_end)
+    "#{first_half}#{second_half}"
   end
 
   @doc ~S"""

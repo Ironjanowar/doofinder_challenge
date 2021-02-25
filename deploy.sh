@@ -24,3 +24,5 @@ mix release
 echo -e "\n\nStarting application\n"
 echo -e "_build/prod/rel/share_code/bin/share_code daemon"
 _build/prod/rel/share_code/bin/share_code daemon
+
+echo -e "Server running in http://localhost:4000"

@@ -27,9 +27,9 @@ The client will send an event for every key pressed, the event looks like this:
 ```
 
 The attributes are:
- - `key` -> The key that was pressed
- - `selection_start` -> If there is text selected indicates where in the textarea the selection starts, if not shows where the `key` was inserted
- - `selection_end` -> If there is a text selected indicates whene in the textarea the selection ends, if not shows where the `key` was inserted
+ - `key` -> The key that was pressed.
+ - `selection_start` -> If there is text selected indicates where in the textarea the selection starts, if not shows where the `key` was inserted.
+ - `selection_end` -> If there is a text selected indicates whene in the textarea the selection ends, if not shows where the `key` was inserted.
 
 The server will record the events in a GenServer, so when a new client joins the server will send the current state of the room. After recording the message the server will also broadcast the event to the rest of the clients.
 
@@ -40,12 +40,26 @@ _I recommend reading this along with the code._
 ### `ShareCode.RoomStateManager`
 
 This module defines the GenServer that is in charge of mantaining the room state. It has two main functions:
-  - `&handle_new_msg/2` -> Receives a room and a new message. Makes an asynchronous call to the GenServer with a `cast`. The GenServer will record the new event in the given room
-  - `&get_room_state/1` -> Receives a room. It will make
+  - `&handle_new_msg/2` -> Receives a room and a new message. Makes an asynchronous call to the GenServer with a `cast`. The GenServer will record the new event in the given room.
+  - `&get_room_state/1` -> Receives a room. Makes a synchronous call to the GenServer with a `call`. The GenServer will answer with the state of the room provided.
 
-## Tests
+## `ShareCode.MessageFormatter`
 
-## Docs
+This module defines different functions used to format a message to send or a message received. It has the following functions:
+  - `&translate_key_code/1` -> Translates special key codes, right now it only translates the `Enter` to a `\n`.
+  - `&add_room/2` -> Adds a room to a Map (normally an event).
+  - `&add_assign_id/2` -> Adds an `assign_id` to a Map (normally an event) from a socket.
+  - `&record_new_event/2` -> Modifies a `room_state` with the given event.
+  - `&get_halfs/3` -> Divides a text by the given start and end selections.
+  - `&delete_selection/4` and `&delete_selection/3` -> Deletes the text between the start and end selection. `&delete_selection/4` will delete the last character of the first half if `:delete_left` is provided and the first character of the second half if `:delete_right` is provided.
+  - `&replace_selection/4` -> Replaces the text between selections with a new one.
+
+## `ShareCodeWeb.DefaultRoomChannel`
+
+This module specifies the behaviour for the socket where the clients are going to be connected. It has the following functions:
+ - `&join/3` -> This function is called when new client joins. The server will get the room state and send it back to the client. The server will also assign an ID to that client to identify it.
+ - `&handle_in/3` -> This function is called when a new message arrives (with the topic `new_msg`). The server will record the message, add the client ID to the message and brodcast it.
+ - `&handle_out/3` -> This function is called when a message is going to be sent. The server will check if the message that we are sending has the same ID of the socket that where we are going to push the message, if the ID is the same the server will not send the message. This avoids that the client replicates the information.
 
 ## Usage
 
@@ -55,5 +69,3 @@ If this does not work start the aplication in dew with:
  - `make deps`
  - `make compile`
  - `make iex`
-
-# Future development
