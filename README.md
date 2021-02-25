@@ -8,6 +8,15 @@ When new keys are detected in the browser, the client will send the key events t
 
 When a new client joins the server will assign an identifier to that client and send the current room state.
 
+# Usage
+
+To deploy the web server execute the script `./deploy.sh`, it should create a release and start it. To stop the process execute `./stop.sh`
+
+If this does not work start the aplication in dev with:
+ - `make deps`
+ - `make compile`
+ - `make iex`
+
 # Implementation
 
 To create the web server I have used Phoenix Framework from Elixir, this framework offers websockets and the possibility to serve static HTML directly.
@@ -81,17 +90,10 @@ The `handle_out` lets us intercept the outgoing message and do the work for the 
 
 By using a Map we can store multiple rooms with indpendent states, this may be helpful for future development.
 
-# Usage
-
-To deploy the web server execute the script `./deploy.sh`, it should create a release and start it. To stop the process execute `./stop.sh`
-
-If this does not work start the aplication in dew with:
- - `make deps`
- - `make compile`
- - `make iex`
-
 # Future Development
 
 - Make the state in the server persistent. Using a non relational storage system such as Redis to save the rooms data we could save the state if the application needs an update or if it crashes.
 - Modify clients to allow multiple rooms. The server is prepared for that but not the clients.
 - Show cursor positions of other clients in the same room. By sending the cursor position everytime it moves the clients could render a bar to show the position of other clients.
+- Add usage metrics by sending the events to an InfluxDB and display them with Grafana.
+- Add json logs, send them to Loki and display them in Grafana.
