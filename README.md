@@ -61,7 +61,27 @@ This module specifies the behaviour for the socket where the clients are going t
  - `&handle_in/3` -> This function is called when a new message arrives (with the topic `new_msg`). The server will record the message, add the client ID to the message and brodcast it.
  - `&handle_out/3` -> This function is called when a message is going to be sent. The server will check if the message that we are sending has the same ID of the socket that where we are going to push the message, if the ID is the same the server will not send the message. This avoids that the client replicates the information.
 
-## Usage
+# Whys
+
+In this section I am going to explain some key decisions that I have made.
+
+## Why sending key events and not text?
+
+To minimize web traffic, sending text changes could not escalate properly. By sending the minimum information we can update in the server the changes and broadcast the same event.
+
+## Why handle_out?
+
+The main reason for `handle_out` is to avoid text replication in the client that sent the event.
+
+The first version of this application had a different aproach, the `assign_id` (the client identification) was stored in each client and sent in every message. The clients will simply ignore the message if the `assign_id` in it was theirs, but once again this will only cause more web traffic.
+
+The `handle_out` lets us intercept the outgoing message and do the work for the client. This will also make the client a bit lighter.
+
+## Why a Map as the RoomStateManager state
+
+By using a Map we can store multiple rooms with indpendent states, this may be helpful for future development.
+
+# Usage
 
 To deploy the web server execute the script `./deploy.sh`, it should create a release and start it. To stop the process execute `./stop.sh`
 
@@ -69,3 +89,9 @@ If this does not work start the aplication in dew with:
  - `make deps`
  - `make compile`
  - `make iex`
+
+# Future Development
+
+- Make the state in the server persistent. Using a non relational storage system such as Redis to save the rooms data we could save the state if the application needs an update or if it crashes.
+- Modify clients to allow multiple rooms. The server is prepared for that but not the clients.
+- Show cursor positions of other clients in the same room. By sending the cursor position everytime it moves the clients could render a bar to show the position of other clients.
