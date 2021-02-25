@@ -10,6 +10,10 @@ When a new client joins the server will assign an identifier to that client and 
 
 # Usage
 
+Requirements:
+ - npm should be installed, developed with `npm 6.11.3`
+ - elixir should be installed, developed with `elixir 1.11.3`
+
 To deploy the web server execute the script `./deploy.sh`, it should create a release and start it. To stop the process execute `./stop.sh`
 
 If this does not work start the aplication in dev with:
